@@ -84,7 +84,7 @@ async function boot(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session)return loginView();
   if(!(await isAdmin(session.user.id))){await sb.auth.signOut();return loginView(t('noadmin'))}
-  shell();go(tab);startOrderWatch()
+  shell();go(tab);startOrderWatch();setTimeout(function(){try{if(sessionStorage.getItem('trdone')!=='1')trAll(true)}catch(e){}},2500)
 }
 function saveCfg(){const url=$('#cu').value.trim(),key=$('#ck').value.trim();if(!url||!key)return;localStorage.setItem('sbcfg',JSON.stringify({url,key}));boot()}
 async function isAdmin(id){const {data}=await sb.from('user_roles').select('role').eq('user_id',id).eq('role','admin');return !!(data&&data.length)}
@@ -182,15 +182,15 @@ async function autoTranslate(){
     else if(va&&!vf){ef.value=await mmTranslate(va,'ar','fr');did=true}}
   return did}
 /* one click: translates every product whose Arabic name/description is missing or not Arabic */
-async function trAll(){
-  if(!confirm(t('trAllAsk')))return;
+async function trAll(silent){
+  if(!silent&&!confirm(t('trAllAsk')))return;
   const {data,error}=await sb.from('products').select('id,product_translations(lang,name,short_description,description)');if(error)return fail(error);
   const F=['name','short_description','description'],todo=[];
   data.forEach(p=>{const ar=p.product_translations.find(x=>x.lang==='ar')||{},fr=p.product_translations.find(x=>x.lang==='fr')||{};
     const src=f=>(fr[f]||'').trim()||((ar[f]&&!isAr(ar[f]))?ar[f].trim():'');
     const fields=F.filter(f=>{const c=(ar[f]||'').trim();return(!c||!isAr(c))&&src(f)});
     if(fields.length)todo.push({p,ar,fr,fields,src})});
-  if(!todo.length)return toast(t('trAllNone'));
+  if(!todo.length){try{sessionStorage.setItem('trdone','1')}catch(e){}return silent?undefined:toast(t('trAllNone'))}
   let done=0,stopped=false;
   for(const it of todo){
     toast(`${t('trWait')} ${done+1}/${todo.length}`);
@@ -204,6 +204,7 @@ async function trAll(){
       done++;await new Promise(r=>setTimeout(r,250))
     }catch(e){console.error(e);stopped=true;break}}
   toast(stopped?`${t('trAllStop')} (${done}/${todo.length})`:`${t('trAllDone')} (${done})`,stopped);
+  if(!stopped)try{sessionStorage.setItem('trdone','1')}catch(e){}
   if(tab==='catalog')vCatalog()}
 async function trBtn(){
   const b=$('#p_tr');b.disabled=true;toast(t('trWait'));

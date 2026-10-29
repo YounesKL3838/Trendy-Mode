@@ -33,8 +33,8 @@ var slug=new URLSearchParams(location.search).get("s")||"";
 function t(k){return T[lang][k]}
 function url(p){return sb.storage.from("product-images").getPublicUrl(p).data.publicUrl}
 function nm(a,l,f){var x=(a||[]).filter(function(r){return r.lang===l})[0];return x?x[f||"name"]:""}
-function pname(p){return nm(p.product_translations,lang)||nm(p.product_translations,lang==="ar"?"fr":"ar")||p.sku}
-function pdesc(p){var x=(p.product_translations||[]).filter(function(r){return r.lang===lang})[0]||(p.product_translations||[])[0]||{};return x.description||x.short_description||""}
+function pname(p){var n=nm(p.product_translations,lang)||nm(p.product_translations,lang==="ar"?"fr":"ar");return n?trShow(n,lang):p.sku}
+function pdesc(p){var x=(p.product_translations||[]).filter(function(r){return r.lang===lang})[0]||(p.product_translations||[])[0]||{};return trShow(x.description||x.short_description||"",lang)}
 function cur(p){return p.sale_price!=null?Number(p.sale_price):Number(p.price)}
 function fmt(v){return Number(v||0).toLocaleString(lang==="ar"?"ar-DZ":"fr-FR")+" "+t("cur")}
 function pimgs(p){return(p.product_images||[]).slice().sort(function(a,b){return(b.is_primary-a.is_primary)||(a.sort_order-b.sort_order)}).map(function(i){return i.path})}
@@ -147,6 +147,13 @@ async function placeOrder(e){
   var o=r.data;$("#cta").hidden=true;
   $("#order").innerHTML='<div class="ok"><h3>'+t("thanks")+"</h3><p>"+t("orderNo")+' <b dir="ltr">'+esc(o.order_number)+"</b></p><p>"+t("orderTot")+" <b>"+fmt(o.total)+'</b></p><p class="note">'+t("willCall")+'</p><a class="btn sec" href="index.html">'+t("home")+"</a></div>";
   $("#order").scrollIntoView({behavior:"smooth",block:"center"})
+}
+function TR_DONE(){
+  if(state!=="ok"||!LP)return;
+  var c=content(),h=document.querySelector(".lp h1");
+  if(h&&LP.target_type==="product"&&!c.headline)h.textContent=pname(SELS[0].p);
+  var d=document.querySelector(".lp-desc");if(d&&LP.target_type==="product")d.textContent=pdesc(SELS[0].p);
+  var it=$("#items");if(it)it.innerHTML=itemsHtml()
 }
 document.addEventListener("click",function(e){
   var el=e.target,ch=el.closest("[data-i]");

@@ -44,8 +44,8 @@ var st={cat:null,q:"",fav:false,all:false},favs=load("favs",{}),cart=load("cart"
 var SITE=load("site",null)||{},READY=load("site",null)!==null;
 function t(k){var o=SITE.t&&SITE.t[lang]&&SITE.t[lang][k];return o||T[lang][k]}
 function nm(a,l){var x=(a||[]).filter(function(r){return r.lang===l})[0];return x?x.name:""}
-function pname(p){return nm(p.product_translations,lang)||nm(p.product_translations,lang==="ar"?"fr":"ar")||p.sku}
-function pdesc(p){var x=(p.product_translations||[]).filter(function(r){return r.lang===lang})[0]||(p.product_translations||[])[0]||{};return x.description||x.short_description||""}
+function pname(p){var n=nm(p.product_translations,lang)||nm(p.product_translations,lang==="ar"?"fr":"ar");return n?trShow(n,lang):p.sku}
+function pdesc(p){var x=(p.product_translations||[]).filter(function(r){return r.lang===lang})[0]||(p.product_translations||[])[0]||{};return trShow(x.description||x.short_description||"",lang)}
 function url(path){return sb.storage.from("product-images").getPublicUrl(path).data.publicUrl}
 function imgs(p){return(p.product_images||[]).slice().sort(function(a,b){return(b.is_primary-a.is_primary)||(a.sort_order-b.sort_order)})}
 function fmt(v){return Number(v||0).toLocaleString(lang==="ar"?"ar-DZ":"fr-FR")+" "+t("cur")}
@@ -196,6 +196,11 @@ function renderHero(){
   HI=0;heroTimer()
 }
 
+/* called by trans.js when an automatic Arabic translation arrives */
+function TR_DONE(){
+  if($("#pdesc")&&SEL){$("#pdesc").textContent=pdesc(SEL.p);if($("#ptitle"))$("#ptitle").textContent=pname(SEL.p)}
+  if(!LOCKED){renderData();renderHero()}
+}
 /* ---------- banners (managed in the dashboard) ---------- */
 var BT=null;
 function okLink(u){return/^(https?:\/\/|#|\/)/i.test(u||"")}
@@ -269,7 +274,7 @@ function openProduct(id){
   var p=PRODS.filter(function(x){return x.id===id})[0];if(!p)return;
   var vs=p.product_variants||[],first=vs.filter(function(v){return v.stock>0})[0]||vs[0]||{};
   SEL={p:p,color:first.color||null,size:null,qty:1};
-  sheet('<div class="pd"><div>'+galleryHtml(imgs(p).map(function(i){return i.path}))+'</div><div><h3>'+esc(pname(p))+'</h3><div class="price" style="font-size:18px">'+fmt(cur(p))+(p.sale_price!=null?"<s>"+fmt(p.price)+"</s>":"")+'</div><p class="note">'+esc(pdesc(p))+'</p><div id="opts"></div></div></div>');
+  sheet('<div class="pd"><div>'+galleryHtml(imgs(p).map(function(i){return i.path}))+'</div><div><h3 id="ptitle">'+esc(pname(p))+'</h3><div class="price" style="font-size:18px">'+fmt(cur(p))+(p.sale_price!=null?"<s>"+fmt(p.price)+"</s>":"")+'</div><p class="note" id="pdesc">'+esc(pdesc(p))+'</p><div id="opts"></div></div></div>');
   optsRender();initGallery()
 }
 function optsRender(){

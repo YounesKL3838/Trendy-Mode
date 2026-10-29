@@ -357,3 +357,7 @@ header.hide{transform:translateY(-100%)}
 .hv-dots i.on{width:24px;background:var(--ink)}
 
 header .logo{min-width:110px}
+
+/* ---- windows leave room above them so the close/back buttons never sit under the browser bar ---- */
+.overlay{inset:auto;left:0;right:0;top:0;height:100vh;height:100dvh}
+.sheet{max-height:calc(100vh - 84px - env(safe-area-inset-top,0px));max-height:calc(100dvh - 84px - env(safe-area-inset-top,0px))}
