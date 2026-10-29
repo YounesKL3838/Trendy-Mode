@@ -334,3 +334,26 @@ header.hide{transform:translateY(-100%)}
 /* ---- color swatches on chips ---- */
 .chip{display:inline-flex;align-items:center;justify-content:center}
 .sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(128,128,128,.55);margin-inline-end:8px;flex:none}
+
+/* ---- hero v2: text beside two overlapping photos (looks, auto-rotating) ---- */
+.hero{position:static;display:grid;grid-template-columns:minmax(0,1fr);gap:26px;align-items:center;min-height:0;margin-top:0;padding:18px 0 34px;border-radius:0;overflow:visible;background:none}
+.hero>.hero-t{padding:0;max-width:none}
+.hero .hero-t h1,.hero .hero-t p{color:var(--ink)}
+@media (min-width:760px){.hero{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px;padding:40px 0 50px;min-height:0;align-items:center}.hero>.hero-t{padding:0}}
+.hv-wrap{width:100%;max-width:520px;justify-self:center}
+.hv{position:relative;width:100%;aspect-ratio:1/1.1}
+.hv-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;pointer-events:none}
+.hv-slide.on{opacity:1;pointer-events:auto}
+.hv-main{position:absolute;inset-inline-start:0;top:0;width:76%;aspect-ratio:4/5;border:0;padding:0;border-radius:28px;overflow:hidden;background:var(--beige);cursor:pointer;display:block}
+.hv-main img,.hv-sub img{width:100%;height:100%;object-fit:cover;display:block}
+.hv-ph{display:grid;place-items:center;cursor:default}.hv-ph svg{width:60%;filter:drop-shadow(0 14px 16px rgba(28,28,28,.15))}
+.hv-sub{position:absolute;inset-inline-end:0;bottom:0;width:42%;aspect-ratio:4/5;border-radius:22px;overflow:hidden;border:6px solid var(--white);background:var(--sand);box-sizing:border-box}
+.hv-card{position:absolute;inset-inline-start:14px;bottom:8%;max-width:54%;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:10px 16px;box-shadow:0 10px 30px rgba(28,28,28,.1);text-align:start;cursor:pointer;font:inherit;color:var(--ink)}
+.hv-card b{display:block;font-size:14px;line-height:1.35}
+.hv-card span{font-size:13px;opacity:.7;font-family:'Inter',sans-serif}
+.hv-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.hv-dots i{position:relative;width:8px;height:8px;border-radius:999px;background:var(--sand);cursor:pointer;transition:width .35s cubic-bezier(.2,.7,.2,1),background .3s}
+.hv-dots i::after{content:"";position:absolute;inset:-9px -4px}
+.hv-dots i.on{width:24px;background:var(--ink)}
+
+header .logo{min-width:110px}

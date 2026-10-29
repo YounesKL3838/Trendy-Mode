@@ -54,6 +54,8 @@ Object.assign(T.ar,{newOrder:"طلب جديد",pieces:"قطعة",oSub:"المج�
 Object.assign(T.fr,{newOrder:"Nouvelle commande",pieces:"pièces",oSub:"Sous-total",oDisc:"Remise"});
 Object.assign(T.ar,{trHint:"اكتب اسم المنتج ووصفه بلغة واحدة فقط، وتُترجم اللغة الأخرى تلقائيًا عند الحفظ (ويمكنك تعديل الترجمة).",trBtn:"ترجمة تلقائية",trWait:"جارٍ الترجمة…",trDone:"تمت الترجمة التلقائية",trFail:"تعذّرت الترجمة التلقائية، اكتب الترجمة يدويًا أو أعد المحاولة لاحقًا."});
 Object.assign(T.fr,{trHint:"Saisissez le nom et la description dans une seule langue : l’autre est traduite automatiquement à l’enregistrement (vous pouvez la corriger).",trBtn:"Traduire automatiquement",trWait:"Traduction en cours…",trDone:"Traduction automatique effectuée",trFail:"La traduction automatique a échoué, saisissez la traduction manuellement ou réessayez plus tard."});
+Object.assign(T.ar,{trAll:"ترجمة المنتجات للعربية",trAllAsk:"سيُترجم إلى العربية كل اسم أو وصف منتج لا يحتوي نصًا عربيًا (مثل النص الفرنسي المكتوب في خانة العربية). هل تريد المتابعة؟",trAllDone:"اكتملت الترجمة",trAllNone:"كل المنتجات مترجمة للعربية بالفعل",trAllStop:"توقفت الترجمة (الحد اليومي أو انقطاع الاتصال)، أعد المحاولة لاحقًا"});
+Object.assign(T.fr,{trAll:"Traduire les produits en arabe",trAllAsk:"Tout nom ou description de produit sans texte arabe (par exemple du français saisi dans le champ arabe) sera traduit en arabe. Continuer ?",trAllDone:"Traduction terminée",trAllNone:"Tous les produits sont déjà traduits en arabe",trAllStop:"Traduction interrompue (limite quotidienne ou connexion), réessayez plus tard"});
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let lang=(()=>{try{return localStorage.getItem('alang')||'ar'}catch(e){return 'ar'}})();
@@ -170,13 +172,39 @@ async function mmTranslate(text,from,to){
     out.push(decodeEnt(tx))}
   return out.join(' ')}
 /* fills the empty language from the filled one; returns true if something was translated */
+const isAr=s=>/[\u0600-\u06FF]/.test(s||'');
 async function autoTranslate(){
   let did=false;
   for(const [a,f] of [['p_na','p_nf'],['p_sa','p_sf'],['p_da','p_df']]){
-    const ea=$('#'+a),ef=$('#'+f),va=ea.value.trim(),vf=ef.value.trim();
+    const ea=$('#'+a),ef=$('#'+f);let va=ea.value.trim(),vf=ef.value.trim();
+    if(va&&!isAr(va)){if(!vf){vf=va;ef.value=va}va=''}          // French typed in the Arabic box: translate it
     if(!va&&vf){ea.value=await mmTranslate(vf,'fr','ar');did=true}
     else if(va&&!vf){ef.value=await mmTranslate(va,'ar','fr');did=true}}
   return did}
+/* one click: translates every product whose Arabic name/description is missing or not Arabic */
+async function trAll(){
+  if(!confirm(t('trAllAsk')))return;
+  const {data,error}=await sb.from('products').select('id,product_translations(lang,name,short_description,description)');if(error)return fail(error);
+  const F=['name','short_description','description'],todo=[];
+  data.forEach(p=>{const ar=p.product_translations.find(x=>x.lang==='ar')||{},fr=p.product_translations.find(x=>x.lang==='fr')||{};
+    const src=f=>(fr[f]||'').trim()||((ar[f]&&!isAr(ar[f]))?ar[f].trim():'');
+    const fields=F.filter(f=>{const c=(ar[f]||'').trim();return(!c||!isAr(c))&&src(f)});
+    if(fields.length)todo.push({p,ar,fr,fields,src})});
+  if(!todo.length)return toast(t('trAllNone'));
+  let done=0,stopped=false;
+  for(const it of todo){
+    toast(`${t('trWait')} ${done+1}/${todo.length}`);
+    try{
+      const arRow={product_id:it.p.id,lang:'ar',name:it.ar.name||'',short_description:it.ar.short_description||null,description:it.ar.description||null};
+      for(const f of it.fields)arRow[f]=await mmTranslate(it.src(f),'fr','ar');
+      if(!arRow.name)continue;
+      let r=await sb.from('product_translations').upsert(arRow,{onConflict:'product_id,lang'});if(r.error)throw r.error;
+      if(!(it.fr.name||'').trim()){const frName=it.src('name');
+        if(frName){r=await sb.from('product_translations').upsert({product_id:it.p.id,lang:'fr',name:frName,short_description:it.src('short_description')||null,description:it.src('description')||null},{onConflict:'product_id,lang'});if(r.error)throw r.error}}
+      done++;await new Promise(r=>setTimeout(r,250))
+    }catch(e){console.error(e);stopped=true;break}}
+  toast(stopped?`${t('trAllStop')} (${done}/${todo.length})`:`${t('trAllDone')} (${done})`,stopped);
+  if(tab==='catalog')vCatalog()}
 async function trBtn(){
   const b=$('#p_tr');b.disabled=true;toast(t('trWait'));
   try{await autoTranslate();toast(t('trDone'))}catch(e){fail(e)}
@@ -207,7 +235,7 @@ async function vCatalog(){
   const un=rows.filter(p=>!p.category_id);
   $('#main').innerHTML=`<div class="row"><input style="flex:1;min-width:140px" placeholder="${t('search')}" value="${esc(CQ)}" oninput="CQ=this.value;clearTimeout(window._d);window._d=setTimeout(vCatalog,300)">
    <select style="width:auto" onchange="CS=this.value;vCatalog()"><option value="">${t('all')}</option>${['draft','published','archived'].map(s=>`<option value="${s}" ${s===CS?'selected':''}>${t(s)}</option>`).join('')}</select>
-   <button class="btn" onclick="openCat()">+ ${t('addCat')}</button><button class="btn pri" onclick="openProduct()">+ ${t('add')} ${t('prods')}</button></div>
+   <button class="btn" onclick="trAll()">${t('trAll')}</button><button class="btn" onclick="openCat()">+ ${t('addCat')}</button><button class="btn pri" onclick="openProduct()">+ ${t('add')} ${t('prods')}</button></div>
    ${cats.filter(c=>!c.parent_id).map(sec).join('')}
    ${un.length?`<details class="cg" open><summary><b class="sp">${t('uncat')} <span class="muted">(${un.length})</span></b></summary>${grid(un)}</details>`:''}
    ${!cats.length&&!un.length?`<p class="muted">${t('noList')}</p>`:''}`}

@@ -26,6 +26,8 @@ var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){r
 function load(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
 var sb=null;
 if(typeof supabase!=="undefined"&&typeof SUPABASE_URL!=="undefined"&&SUPABASE_URL&&SUPABASE_ANON_KEY){sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)}
+var SITE=load("site",null)||{},READY=load("site",null)!==null;
+function brand(){if(!READY)return;var n=(SITE.t&&SITE.t[lang]&&SITE.t[lang].hTitle)||SITE.name||"Maison Noor",e=document.querySelector(".logo");if(e)e.textContent=n}
 var lang=load("lang","ar"),LP=null,LOOK=null,SELS=[],FEES={"default":0},SHIP=null,DT="home",state="loading",GT=null,GP=null;
 var slug=new URLSearchParams(location.search).get("s")||"";
 function t(k){return T[lang][k]}
@@ -51,7 +53,7 @@ async function loadAll(){
     var lr=await sb.from("landing_pages").select("*").eq("slug",slug).eq("status","published").maybeSingle();
     if(lr.error||!lr.data){state="nf";return}
     LP=lr.data;
-    var fr=await sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping"]);(fr.data||[]).forEach(function(r){if(r.key==="shipping_fees")FEES=r.value;if(r.key==="shipping")SHIP=r.value});
+    var fr=await sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping","site"]);(fr.data||[]).forEach(function(r){if(r.key==="site"){SITE=r.value||{};try{localStorage.setItem("site",JSON.stringify(SITE))}catch(e){}}if(r.key==="shipping_fees")FEES=r.value;if(r.key==="shipping")SHIP=r.value});
     var ps=[];
     if(LP.target_type==="product"){
       var r=await sb.from("products").select(PSEL).eq("id",LP.product_id).maybeSingle();if(r.error||!r.data){state="nf";return}ps=[r.data]
@@ -112,7 +114,7 @@ function totals(){
   var al=$("#o_al");if(al)al.textContent=DT==="office"?t("fOffice"):t("fAddr")
 }
 function render(){
-  var h=document.documentElement;h.lang=lang;h.dir=lang==="ar"?"rtl":"ltr";$("#lang").textContent=t("lang");
+  var h=document.documentElement;h.lang=lang;h.dir=lang==="ar"?"rtl":"ltr";$("#lang").textContent=t("lang");brand();
   var box=$("#lp");$("#cta").hidden=true;
   if(state==="loading"){box.innerHTML="";return}
   if(state!=="ok"){box.innerHTML='<div class="lp-nf"><p>'+t(state==="noconf"?"noConf":"nf")+'</p><a class="btn pri" href="index.html">'+t("home")+"</a></div>";return}
@@ -121,7 +123,7 @@ function render(){
   else{var tr=lookTr();paths=(LOOK.outfit_images||[]).slice().sort(function(a,b){return(b.is_primary-a.is_primary)||(a.sort_order-b.sort_order)}).map(function(i){return i.path});if(!paths.length&&LOOK.image_path)paths=[LOOK.image_path];
     title=c.headline||tr.title;desc=tr.description||"";priceHtml=t("lookTotal")+": "+fmt(SELS.reduce(function(a,s){return a+cur(s.p)},0))}
   var ben=(c.benefits||[]).filter(Boolean),wl=lang==="ar"?WA:WF,ctaT=c.cta||t("order"),form=(LP.content||{}).form!==false;
-  document.title=title+" | Maison Noor";
+  document.title=title+" | "+(SITE.name||"Maison Noor");
   box.innerHTML='<section class="lp-hero"><div>'+galleryHtml(paths)+'</div><div><h1>'+esc(title)+"</h1>"+(c.sub?'<p class="sub">'+esc(c.sub)+"</p>":"")+'<div class="lp-price">'+priceHtml+"</div>"+
    (ben.length?'<ul class="lp-ben">'+ben.map(function(b){return"<li>"+esc(b)+"</li>"}).join("")+"</ul>":"")+
    (form?'<div class="lp-order" id="order"><h2>'+t("orderT")+'</h2><div id="items">'+itemsHtml()+'</div><form id="co" novalidate><label class="fld">'+t("fName")+'</label><input id="o_n" autocomplete="name"><label class="fld">'+t("fPhone")+'</label><input id="o_p" type="tel" dir="ltr" autocomplete="tel">'+
@@ -158,4 +160,5 @@ document.addEventListener("click",function(e){
 });
 $("#lang").onclick=function(){lang=lang==="ar"?"fr":"ar";try{localStorage.setItem("lang",JSON.stringify(lang))}catch(e){}render()};
 render();
-loadAll().then(render);
+loadAll().then(function(){READY=true;document.documentElement.classList.remove("pend");render()});
+setTimeout(function(){document.documentElement.classList.remove("pend")},3000);

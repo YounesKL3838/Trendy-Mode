@@ -6,11 +6,14 @@
 <title>Maison Noor | متجر أزياء رجالية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>html.pend body{visibility:hidden}</style>
+<script>try{if(localStorage.getItem("site")===null)document.documentElement.className+=" pend"}catch(e){}</script>
+<noscript><style>html.pend body{visibility:visible}</style></noscript>
 <link rel="stylesheet" href="css/store.css">
 </head>
 <body>
 <header><div class="wrap bar">
-<a class="logo" href="#top">Maison Noor</a>
+<a class="logo" href="#top"></a>
 <nav class="main"><a href="#new" data-i="nNew"></a><a href="#looks" id="nlk" data-i="nLooks" hidden></a><a href="#cats" data-i="nCats"></a><a href="#best" data-i="nBest"></a><a href="#about" data-i="nAbout"></a></nav>
 <span class="sp"></span>
 <label class="search hide-s"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="qin" type="search" data-ip="search" aria-label="search"></label>
@@ -21,9 +24,9 @@
 <main id="top" class="wrap">
 <div class="msearch"><label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="qin" type="search" data-ip="search" aria-label="search"></label></div>
 <div class="hero">
-<div><h1 data-i="h1"></h1><p data-i="sub"></p>
+<div class="hero-t"><h1 data-i="h1"></h1><p data-i="sub"></p>
 <div class="btns"><a class="btn pri" href="#best" data-i="shop"></a><a class="btn sec" href="#new" data-i="explore"></a></div></div>
-<div class="stage" id="heroStage" aria-hidden="true"><svg viewBox="0 0 120 140" fill="none"><path d="M38 14 60 22 82 14 106 34 96 60 86 54V126H34V54L24 60 14 34Z" fill="#1C1C1C"/><path d="M60 22 46 50 60 126 74 50Z" fill="#FAFAFA"/><path d="M60 22 52 14M60 22 68 14" stroke="#DCDCDC" stroke-width="3"/><circle cx="60" cy="70" r="2.2" fill="#555555"/><circle cx="60" cy="88" r="2.2" fill="#555555"/></svg></div>
+<div class="hv-wrap"><div class="hv" id="heroVis"><div class="hv-slide on"><div class="hv-main hv-ph"><svg viewBox="0 0 120 140" fill="none"><path d="M38 14 60 22 82 14 106 34 96 60 86 54V126H34V54L24 60 14 34Z" fill="#1C1C1C"/><path d="M60 22 46 50 60 126 74 50Z" fill="#FAFAFA"/><path d="M60 22 52 14M60 22 68 14" stroke="#DCDCDC" stroke-width="3"/><circle cx="60" cy="70" r="2.2" fill="#555555"/><circle cx="60" cy="88" r="2.2" fill="#555555"/></svg></div><div class="hv-sub"></div></div></div><div class="hv-dots" id="heroDots"></div></div>
 </div>
 
 <section id="new"><div class="head"><h2 data-i="newT"></h2><div class="hh"><a href="#" data-i="all"></a><div class="harrs"><button type="button" data-sc="g1" data-d="-1" aria-label="prev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button><button type="button" data-sc="g1" data-d="1" aria-label="next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button></div></div></div><div class="grid hrow" id="g1"></div></section>
@@ -39,7 +42,7 @@
 </main>
 
 <footer><div class="wrap"><div class="fcols">
-<div><div class="logo">Maison Noor</div><p data-i="fAbout" style="opacity:.7;max-width:34ch"></p></div>
+<div><div class="logo"></div><p data-i="fAbout" style="opacity:.7;max-width:34ch"></p></div>
 <div><h4 data-i="fShop"></h4><a href="#new" data-i="nNew"></a><a href="#best" data-i="nBest"></a><a href="#cats" data-i="nCats"></a></div>
 <div><h4 data-i="fHelp"></h4><a href="#" data-i="fShip"></a><a href="#" data-i="fRet"></a><a href="#" data-i="fFaq"></a></div>
 <div><h4 data-i="fContact"></h4><div id="contact"></div></div>

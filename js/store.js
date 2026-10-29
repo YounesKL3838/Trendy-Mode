@@ -41,7 +41,7 @@ if(typeof supabase!=="undefined"&&typeof SUPABASE_URL!=="undefined"&&SUPABASE_UR
 var lang=load("lang","ar"),PRODS=[],CATS=[],LOOKS=[],BANNERS=[],SHIP=null,DT="home",FEES={"default":0},dstate="loading";
 var st={cat:null,q:"",fav:false,all:false},favs=load("favs",{}),cart=load("cart",[]);
 
-var SITE={};
+var SITE=load("site",null)||{},READY=load("site",null)!==null;
 function t(k){var o=SITE.t&&SITE.t[lang]&&SITE.t[lang][k];return o||T[lang][k]}
 function nm(a,l){var x=(a||[]).filter(function(r){return r.lang===l})[0];return x?x.name:""}
 function pname(p){return nm(p.product_translations,lang)||nm(p.product_translations,lang==="ar"?"fr":"ar")||p.sku}
@@ -65,7 +65,7 @@ async function loadData(){
       sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping","site"])]);
     if(r[0].error)throw r[0].error;if(r[1].error)throw r[1].error;
     CATS=r[0].data||[];PRODS=r[1].data||[];
-    (r[2].data||[]).forEach(function(row){if(row.key==="shipping_fees")FEES=row.value;if(row.key==="site")SITE=row.value||{};if(row.key==="shipping")SHIP=row.value});
+    (r[2].data||[]).forEach(function(row){if(row.key==="shipping_fees")FEES=row.value;if(row.key==="site")SITE=row.value||{};if(row.key==="shipping")SHIP=row.value});save("site",SITE);
     try{var lr=await sb.from("outfits").select("id,slug,image_path,sort_order,outfit_translations(lang,title,description),outfit_items(product_id,sort_order),outfit_images(path,is_primary,sort_order)").eq("status","published").order("sort_order");LOOKS=lr.error?[]:(lr.data||[])}catch(e2){LOOKS=[]}
     try{var br=await sb.from("banners").select("*").eq("is_active",true).order("sort_order");BANNERS=br.error?[]:(br.data||[])}catch(e3){BANNERS=[]}
     dstate="ok"
@@ -164,7 +164,36 @@ function render(){
   $("#lang").textContent=t("lang");
   splitH1();
   $("#qs").innerHTML=t("q").map(function(q){return '<div class="q"><p>«'+q[0]+"»</p><b>"+q[1]+"</b></div>"}).join("");
-  setBadge();renderData();applySite();renderBanners()
+  setBadge();renderData();applySite();renderBanners();renderHero()
+}
+
+/* ---------- hero: two overlapping photos that cycle through the looks ---------- */
+var HT=null,HI=0;
+function heroSlide(x,k,ls){
+  var sub=x.imgs[1]||null;
+  if(!sub){var nx=ls[(k+1)%ls.length];if(nx&&nx!==x&&nx.imgs[0]!==x.imgs[0])sub=nx.imgs[0]}
+  if(!sub){var pi=x.ps[0]?imgs(x.ps[0])[0]:null;if(pi&&pi.path!==x.imgs[0])sub=pi.path}
+  return '<div class="hv-slide'+(k?"":" on")+'"><button type="button" class="hv-main" data-l="'+x.l.id+'" aria-label="'+esc(x.tr.title)+'"><img alt="" '+(k?'loading="lazy" ':"")+'src="'+esc(url(x.imgs[0]))+'"></button>'+(sub?'<div class="hv-sub"><img alt="" loading="lazy" src="'+esc(url(sub))+'"></div>':"")+'<button type="button" class="hv-card" data-l="'+x.l.id+'"><b>'+esc(x.tr.title)+"</b><span>"+fmt(x.total)+"</span></button></div>"
+}
+function heroGo(i){
+  var sl=document.querySelectorAll("#heroVis .hv-slide"),ds=document.querySelectorAll("#heroDots i");if(!sl.length)return;
+  HI=(i+sl.length)%sl.length;
+  sl.forEach(function(s,k){s.classList.toggle("on",k===HI)});ds.forEach(function(d,k){d.classList.toggle("on",k===HI)})
+}
+function heroTimer(){
+  clearInterval(HT);var n=document.querySelectorAll("#heroVis .hv-slide").length;
+  if(n>1&&!window.matchMedia("(prefers-reduced-motion:reduce)").matches)HT=setInterval(function(){if(!LOCKED)heroGo(HI+1)},4500)
+}
+function renderHero(){
+  var box=$("#heroVis"),dots=$("#heroDots");if(!box||!sb||dstate!=="ok")return;
+  var ls=lookData().filter(function(x){return x.imgs.length});
+  if(!ls.length){
+    if(SITE.hero){box.innerHTML='<div class="hv-slide on"><div class="hv-main"><img alt="" src="'+esc(url(SITE.hero))+'"></div></div>';dots.innerHTML=""}
+    return
+  }
+  box.innerHTML=ls.map(function(x,k){return heroSlide(x,k,ls)}).join("");
+  dots.innerHTML=ls.length>1?ls.map(function(x,k){return'<i class="'+(k?"":"on")+'" data-hd="'+k+'" role="button" aria-label="'+(k+1)+'"></i>'}).join(""):"";
+  HI=0;heroTimer()
 }
 
 /* ---------- banners (managed in the dashboard) ---------- */
@@ -212,10 +241,10 @@ function contactHtml(){
   return out
 }
 function applySite(){
+  if(!READY)return;
   var name=SITE.name||"Maison Noor";
   var hl=document.querySelector("header .logo");if(hl)hl.textContent=t("hTitle")||name;
   var fl=document.querySelector("footer .logo");if(fl)fl.innerHTML=(SITE.logo&&sb)?'<img class="logo-img" alt="'+esc(name)+'" src="'+esc(url(SITE.logo))+'">':esc(name);
-  var hs=$("#heroStage");if(hs&&SITE.hero&&sb){hs.innerHTML='<img class="stage-img" alt="" src="'+esc(url(SITE.hero))+'">';hs.parentNode.classList.add("has-img")}
   var ab=$("#aboutStage");if(ab&&SITE.about_img&&sb)ab.innerHTML='<img class="stage-img" alt="" src="'+esc(url(SITE.about_img))+'">';
   var cp=$("#copy");
   if(cp){var d=SITE.dev||{},txt=t("copy")||("© "+new Date().getFullYear()+" "+name);
@@ -331,6 +360,7 @@ document.addEventListener("click",function(e){
   var el=e.target;
   var f=el.closest("[data-f]");if(f){e.stopPropagation();favs[f.dataset.f]=!favs[f.dataset.f];if(!favs[f.dataset.f])delete favs[f.dataset.f];save("favs",favs);f.setAttribute("aria-pressed",!!favs[f.dataset.f]);if(st.fav)renderData();return}
   var dtb=el.closest("[data-dt]");if(dtb&&$("#o_w")){DT=dtb.dataset.dt;renderDelivery();return}
+  var hdd=el.closest("[data-hd]");if(hdd){heroGo(Number(hdd.dataset.hd));heroTimer();return}
   var sc=el.closest("[data-sc]");if(sc){var tg=document.getElementById(sc.dataset.sc);if(tg)tg.scrollBy({left:Number(sc.dataset.d)*tg.clientWidth*.8*(document.documentElement.dir==="rtl"?-1:1),behavior:"smooth"});return}
   var ad=el.closest("[data-add]");if(ad){e.stopPropagation();quickAdd(ad.dataset.add);return}
   var c=el.closest("[data-c]");if(c){e.preventDefault();st.cat=st.cat===c.dataset.c?null:c.dataset.c;st.fav=false;st.all=false;st.grp=null;renderData();if(st.cat)$("#cats").scrollIntoView({behavior:"smooth"});return}
@@ -373,4 +403,5 @@ function onScroll(){var y=window.scrollY,h=document.documentElement.scrollHeight
 window.addEventListener("scroll",onScroll,{passive:true});onScroll();
 
 render();
-loadData().then(function(){syncCart();renderData();applySite();renderBanners()});
+loadData().then(function(){READY=true;document.documentElement.classList.remove("pend");syncCart();renderData();applySite();renderBanners();renderHero()});
+setTimeout(function(){document.documentElement.classList.remove("pend")},3000);
