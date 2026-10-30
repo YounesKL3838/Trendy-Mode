@@ -27,6 +27,7 @@ function load(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?
 var sb=null;
 if(typeof supabase!=="undefined"&&typeof SUPABASE_URL!=="undefined"&&SUPABASE_URL&&SUPABASE_ANON_KEY){sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)}
 var SITE=load("site",null)||{},READY=load("site",null)!==null;
+var VIEWED=0;
 function brand(){if(!READY)return;var n=(SITE.t&&SITE.t[lang]&&SITE.t[lang].hTitle)||SITE.name||"Maison Noor",e=document.querySelector(".logo");if(e)e.textContent=n}
 var lang=load("lang","ar"),LP=null,LOOK=null,SELS=[],FEES={"default":0},SHIP=null,DT="home",state="loading",GT=null,GP=null;
 var slug=new URLSearchParams(location.search).get("s")||"";
@@ -53,7 +54,7 @@ async function loadAll(){
     var lr=await sb.from("landing_pages").select("*").eq("slug",slug).eq("status","published").maybeSingle();
     if(lr.error||!lr.data){state="nf";return}
     LP=lr.data;
-    var fr=await sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping","site"]);(fr.data||[]).forEach(function(r){if(r.key==="site"){SITE=r.value||{};try{localStorage.setItem("site",JSON.stringify(SITE))}catch(e){}}if(r.key==="shipping_fees")FEES=r.value;if(r.key==="shipping")SHIP=r.value});
+    var fr=await sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping","site","marketing"]);(fr.data||[]).forEach(function(r){if(r.key==="marketing")PX.set(r.value);if(r.key==="site"){SITE=r.value||{};try{localStorage.setItem("site",JSON.stringify(SITE))}catch(e){}}if(r.key==="shipping_fees")FEES=r.value;if(r.key==="shipping")SHIP=r.value});if(!(fr.data||[]).some(function(x){return x.key==="marketing"}))PX.set({});
     var ps=[];
     if(LP.target_type==="product"){
       var r=await sb.from("products").select(PSEL).eq("id",LP.product_id).maybeSingle();if(r.error||!r.data){state="nf";return}ps=[r.data]
@@ -132,6 +133,7 @@ function render(){
    "</div></section>"+(!isP?"":(desc?'<p class="lp-desc">'+esc(desc)+"</p>":""));
   if(!isP&&desc)box.insertAdjacentHTML("beforeend",'<p class="lp-desc">'+esc(desc)+"</p>");
   if(form){$("#cta").hidden=false;$("#ctab").textContent=ctaT;totals();$("#o_w").onchange=totals;$("#co").onsubmit=placeOrder}
+  if(!VIEWED){VIEWED=1;PX.track("ViewContent",{id:LP.product_id||LP.outfit_id,ids:SELS.map(function(s){return s.p.id}),name:title,value:SELS.reduce(function(a,s){return a+cur(s.p)*s.qty},0)})}
   initGallery()
 }
 async function placeOrder(e){
@@ -144,7 +146,7 @@ async function placeOrder(e){
   b.disabled=true;
   var r=await sb.rpc("create_order",{p_items:items,p_customer:cust,p_code:$("#o_c").value.trim()||null});
   if(r.error){var m=r.error.message||"";err.textContent=m.indexOf("out_of_stock")>=0||m.indexOf("product_unavailable")>=0||m.indexOf("variant_not_found")>=0?t("eStock"):m.indexOf("delivery_unavailable")>=0?t("eDeliv"):m.indexOf("invalid_discount")>=0?t("eCode"):m.indexOf("invalid_customer")>=0?t("eCust"):t("eGen");b.disabled=false;return}
-  var o=r.data;$("#cta").hidden=true;
+  var o=r.data;PX.track("Purchase",{value:o.total,ids:SELS.map(function(s){return s.p.id}),n:SELS.reduce(function(a,s){return a+s.qty},0)});$("#cta").hidden=true;
   $("#order").innerHTML='<div class="ok"><h3>'+t("thanks")+"</h3><p>"+t("orderNo")+' <b dir="ltr">'+esc(o.order_number)+"</b></p><p>"+t("orderTot")+" <b>"+fmt(o.total)+'</b></p><p class="note">'+t("willCall")+'</p><a class="btn sec" href="index.html">'+t("home")+"</a></div>";
   $("#order").scrollIntoView({behavior:"smooth",block:"center"})
 }

@@ -1,7 +1,7 @@
 /* Maison Noor storefront, connected to Supabase (see js/config.js) */
 var T={
 ar:{h1:"أناقتك تبدأ من هنا",sub:"قطع رجالية مفصّلة بعناية من أقمشة مختارة، بتصاميم هادئة تدوم موسمًا بعد موسم.",shop:"تسوّق الآن",explore:"استكشف المجموعة الجديدة",nNew:"وصل حديثًا",nCats:"التصنيفات",nBest:"الأكثر مبيعًا",nAbout:"من نحن",search:"ابحث عن قطعة…",newT:"وصل حديثًا",all:"عرض الكل",catT:"تسوّق حسب التصنيف",bestT:"الأكثر مبيعًا",banT:"مجموعة الخريف والشتاء",banP:"معاطف وبدلات وقمصان بألوان ترابية دافئة، متوفرة الآن.",banB:"اكتشف المجموعة",abT:"عن العلامة",abP:"بدأنا من فكرة بسيطة: ملابس رجالية متقنة الخياطة، بقصّات واضحة وألوان هادئة، تُلبس كل يوم وتبقى أنيقة.",qT:"آراء العملاء",nlT:"اشترك في نشرتنا",nlP:"كن أول من يعرف بالمجموعات الجديدة والعروض.",sub2:"اشتراك",email:"بريدك الإلكتروني",fAbout:"أزياء رجالية فاخرة بتفاصيل هادئة.",fShop:"المتجر",fHelp:"المساعدة",fShip:"الشحن",fRet:"الاستبدال والإرجاع",fFaq:"الأسئلة الشائعة",fContact:"تواصل معنا",bHome:"الرئيسية",bSearch:"بحث",bFav:"المفضلة",
-cur:"د.ج",lang:"Français",clear:"إلغاء التصفية",nLooks:"إطلالات",dHome:"توصيل إلى المنزل",dOffice:"توصيل إلى المكتب",dNA:"غير متاح",eDeliv:"التوصيل غير متاح لهذه الولاية أو بهذا النوع.",fOffice:"المكتب أو البلدية",contactT:"تواصل معنا",contactP:"يسعدنا خدمتك، تواصل معنا بالطريقة الأنسب لك.",devBy:"تطوير:",tLook:"إطلالة",choose:"اختر المقاس واللون",back:"رجوع",looksT:"إطلالات كاملة",lookTotal:"مجموع القطع",viewItems:"القطع في هذه الإطلالة",
+cur:"د.ج",lang:"Français",clear:"إلغاء التصفية",nLooks:"إطلالات",featT:"مميز",tFeat:"مميز",dHome:"توصيل إلى المنزل",dOffice:"توصيل إلى المكتب",dNA:"غير متاح",eDeliv:"التوصيل غير متاح لهذه الولاية أو بهذا النوع.",fOffice:"المكتب أو البلدية",contactT:"تواصل معنا",contactP:"يسعدنا خدمتك، تواصل معنا بالطريقة الأنسب لك.",devBy:"تطوير:",tLook:"إطلالة",choose:"اختر المقاس واللون",back:"رجوع",looksT:"إطلالات كاملة",lookTotal:"مجموع القطع",viewItems:"القطع في هذه الإطلالة",
 tNew:"جديد",tBest:"الأكثر مبيعًا",soldOut:"نفد",results:"نتائج البحث",favT:"المفضلة",allT:"كل المنتجات",
 noData:"لا توجد منتجات منشورة بعد.",noConf:"لم يتم ربط Supabase بعد: عدّل الملف js/config.js.",loadErr:"تعذّر تحميل البيانات، حاول مرة أخرى.",
 color:"اللون",size:"المقاس",qty:"الكمية",inStock:"متوفر:",pick:"اختر اللون والمقاس",addCart:"أضف إلى السلة",added:"أُضيف إلى السلة",
@@ -12,7 +12,7 @@ eStock:"إحدى القطع لم تعد متوفرة بالكمية المطلو
 subbed:"تم الاشتراك بنجاح",rem:"حذف",
 q:[["جودة الخياطة تفوق توقعاتي، والمقاس مضبوط تمامًا.","كريم، المدية"],["وصلني الطلب في أيام قليلة والتغليف أنيق.","يوسف، الجزائر"],["ألوان هادئة وقماش مريح، سأطلب مجددًا.","أمين، وهران"]]},
 fr:{h1:"Votre élégance commence ici",sub:"Des pièces masculines coupées avec soin dans des matières choisies, aux lignes sobres qui durent saison après saison.",shop:"Acheter maintenant",explore:"Découvrir la nouvelle collection",nNew:"Nouveautés",nCats:"Catégories",nBest:"Meilleures ventes",nAbout:"À propos",search:"Rechercher une pièce…",newT:"Nouveautés",all:"Tout voir",catT:"Acheter par catégorie",bestT:"Meilleures ventes",banT:"Collection automne-hiver",banP:"Manteaux, costumes et chemises dans des tons terre chaleureux, disponibles dès maintenant.",banB:"Découvrir la collection",abT:"La marque",abP:"Tout est parti d’une idée simple : des vêtements masculins bien coupés, aux lignes nettes et aux couleurs calmes, à porter chaque jour avec élégance.",qT:"Avis clients",nlT:"Abonnez-vous à la newsletter",nlP:"Soyez les premiers informés des nouvelles collections et des offres.",sub2:"S’abonner",email:"Votre adresse e-mail",fAbout:"Mode masculine haut de gamme, aux détails sobres.",fShop:"Boutique",fHelp:"Aide",fShip:"Livraison",fRet:"Échanges et retours",fFaq:"Questions fréquentes",fContact:"Contact",bHome:"Accueil",bSearch:"Recherche",bFav:"Favoris",
-cur:"DA",lang:"العربية",clear:"Effacer le filtre",nLooks:"Looks",dHome:"Livraison à domicile",dOffice:"Livraison au bureau",dNA:"Indisponible",eDeliv:"Livraison indisponible pour cette wilaya ou ce mode.",fOffice:"Bureau ou commune",contactT:"Contactez-nous",contactP:"Nous sommes là pour vous répondre, choisissez le moyen qui vous convient.",devBy:"Développé par",tLook:"Look",choose:"Choisir taille et couleur",back:"Retour",looksT:"Looks complets",lookTotal:"Total des pièces",viewItems:"Les pièces de ce look",
+cur:"DA",lang:"العربية",clear:"Effacer le filtre",nLooks:"Looks",featT:"En vedette",tFeat:"Vedette",dHome:"Livraison à domicile",dOffice:"Livraison au bureau",dNA:"Indisponible",eDeliv:"Livraison indisponible pour cette wilaya ou ce mode.",fOffice:"Bureau ou commune",contactT:"Contactez-nous",contactP:"Nous sommes là pour vous répondre, choisissez le moyen qui vous convient.",devBy:"Développé par",tLook:"Look",choose:"Choisir taille et couleur",back:"Retour",looksT:"Looks complets",lookTotal:"Total des pièces",viewItems:"Les pièces de ce look",
 tNew:"Nouveau",tBest:"Meilleure vente",soldOut:"Épuisé",results:"Résultats de recherche",favT:"Favoris",allT:"Tous les produits",
 noData:"Aucun produit publié pour l’instant.",noConf:"Supabase n’est pas encore connecté : modifiez le fichier js/config.js.",loadErr:"Impossible de charger les données, réessayez.",
 color:"Couleur",size:"Taille",qty:"Quantité",inStock:"En stock :",pick:"Choisissez la couleur et la taille",addCart:"Ajouter au panier",added:"Ajouté au panier",
@@ -38,7 +38,7 @@ function load(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 var sb=null;
 if(typeof supabase!=="undefined"&&typeof SUPABASE_URL!=="undefined"&&SUPABASE_URL&&SUPABASE_ANON_KEY){sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)}
-var lang=load("lang","ar"),PRODS=[],CATS=[],LOOKS=[],BANNERS=[],SHIP=null,DT="home",FEES={"default":0},dstate="loading";
+var lang=load("lang","ar"),PRODS=[],CATS=[],LOOKS=[],BANNERS=[],SECS=[],SHIP=null,DT="home",FEES={"default":0},dstate="loading";
 var st={cat:null,q:"",fav:false,all:false},favs=load("favs",{}),cart=load("cart",[]);
 
 var SITE=load("site",null)||{},READY=load("site",null)!==null;
@@ -62,19 +62,20 @@ async function loadData(){
     var r=await Promise.all([
       sb.from("categories").select("id,parent_id,slug,image_path,sort_order,category_translations(lang,name)").order("sort_order"),
       sb.from("products").select("id,sku,price,sale_price,is_new,is_featured,is_bestseller,category_id,subcategory_id,product_translations(lang,name,short_description,description),product_images(path,is_primary,sort_order),product_variants(id,size,color,stock)").order("created_at",{ascending:false}),
-      sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping","site"])]);
+      sb.from("store_settings").select("key,value").in("key",["shipping_fees","shipping","site","marketing"])]);
     if(r[0].error)throw r[0].error;if(r[1].error)throw r[1].error;
     CATS=r[0].data||[];PRODS=r[1].data||[];
-    (r[2].data||[]).forEach(function(row){if(row.key==="shipping_fees")FEES=row.value;if(row.key==="site")SITE=row.value||{};if(row.key==="shipping")SHIP=row.value});save("site",SITE);
+    (r[2].data||[]).forEach(function(row){if(row.key==="shipping_fees")FEES=row.value;if(row.key==="site")SITE=row.value||{};if(row.key==="shipping")SHIP=row.value;if(row.key==="marketing")PX.set(row.value)});if(!(r[2].data||[]).some(function(x){return x.key==="marketing"}))PX.set({});save("site",SITE);
     try{var lr=await sb.from("outfits").select("id,slug,image_path,sort_order,outfit_translations(lang,title,description),outfit_items(product_id,sort_order),outfit_images(path,is_primary,sort_order)").eq("status","published").order("sort_order");LOOKS=lr.error?[]:(lr.data||[])}catch(e2){LOOKS=[]}
     try{var br=await sb.from("banners").select("*").eq("is_active",true).order("sort_order");BANNERS=br.error?[]:(br.data||[])}catch(e3){BANNERS=[]}
+    try{var sr=await sb.from("home_sections").select("id,title_ar,title_fr,sort_order,home_section_items(product_id,sort_order)").eq("is_active",true).order("sort_order");SECS=sr.error?[]:(sr.data||[])}catch(e4){SECS=[]}
     dstate="ok"
   }catch(e){console.error(e);dstate="error"}
 }
 
 /* ---------- rendering ---------- */
 function card(p){
-  var im=imgs(p)[0],out=stock(p)<=0,tag=p.is_new?t("tNew"):p.is_bestseller?t("tBest"):"";
+  var im=imgs(p)[0],out=stock(p)<=0,tag=p.is_new?t("tNew"):p.is_featured?t("tFeat"):p.is_bestseller?t("tBest"):"";
   return '<article class="card" data-p="'+p.id+'"><div class="ph" style="background:var(--beige)">'+(im?'<img class="pimg" loading="lazy" alt="" src="'+esc(url(im.path))+'">':"")+
   (tag?'<span class="tag">'+tag+"</span>":"")+(out?'<span class="sold">'+t("soldOut")+"</span>":"")+
   '<button class="fav" type="button" aria-pressed="'+!!favs[p.id]+'" data-f="'+p.id+'" aria-label="fav"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10Z"/></svg></button></div>'+
@@ -124,7 +125,9 @@ function msg(k){return '<p class="empty">'+t(k)+"</p>"}
 function filtered(){
   var q=st.q.toLowerCase(),base=PRODS;
   if(st.grp==="looks")return [];
+  if(st.grp&&st.grp.indexOf("cs-")===0){var SS=SECS.filter(function(x){return"cs-"+x.id===st.grp})[0];base=SS?secProducts(SS):[]}
   if(st.grp==="new"){var nw=PRODS.filter(function(p){return p.is_new});base=nw.length?nw:PRODS}
+  if(st.grp==="feat")base=PRODS.filter(function(p){return p.is_featured});
   if(st.grp==="best")base=PRODS.filter(function(p){return p.is_bestseller});
   return base.filter(function(p){
     if(st.fav&&!favs[p.id])return false;
@@ -132,10 +135,22 @@ function filtered(){
     if(q){var s=(p.sku+" "+nm(p.product_translations,"ar")+" "+nm(p.product_translations,"fr")).toLowerCase();if(s.indexOf(q)<0)return false}
     return true})
 }
+var CH_L='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',CH_R='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+function harrs(id){return'<div class="harrs"><button type="button" data-sc="'+id+'" data-d="-1" aria-label="prev">'+CH_L+'</button><button type="button" data-sc="'+id+'" data-d="1" aria-label="next">'+CH_R+"</button></div>"}
+function secProducts(S){return(S.home_section_items||[]).slice().sort(function(a,b){return a.sort_order-b.sort_order}).map(function(i){return PRODS.filter(function(p){return p.id===i.product_id})[0]}).filter(Boolean)}
+function secTitle(S){return lang==="ar"?(S.title_ar||S.title_fr):(S.title_fr||S.title_ar)}
+function hasCustom(){return SECS.some(function(S){return secProducts(S).length})}
+function grpTitle(g){if(g&&g.indexOf("cs-")===0){var S=SECS.filter(function(x){return"cs-"+x.id===g})[0];return S?secTitle(S):""}return t({"new":"newT",feat:"featT",best:"bestT",looks:"looksT"}[g])}
+function renderCustomSections(){
+  var box=$("#csec");if(!box)return;
+  box.innerHTML=SECS.map(function(S){
+    var ps=secProducts(S).slice(0,12);if(!ps.length)return"";var id="cs-"+S.id;
+    return'<section id="'+id+'"><div class="head"><h2>'+esc(secTitle(S))+'</h2><div class="hh"><a href="#" data-i="all">'+t("all")+"</a>"+harrs(id+"-g")+'</div></div><div class="grid hrow" id="'+id+'-g">'+ps.map(card).join("")+"</div></section>"}).join("")
+}
 function renderDataInner(){
   var active=st.cat||st.q||st.fav||st.all;
   renderLooks(active);
-  $("#res").hidden=!active;$("#new").hidden=!!active;$("#best").hidden=!!active;
+  $("#res").hidden=!active;$("#new").hidden=!!active;$("#feat").hidden=!!active;$("#csec").hidden=!!active;$("#best").hidden=!!active;
   var has={};PRODS.forEach(function(p){if(p.category_id)has[p.category_id]=1;if(p.subcategory_id){has[p.subcategory_id]=1;var sc=CATS.filter(function(c){return c.id===p.subcategory_id})[0];if(sc&&sc.parent_id)has[sc.parent_id]=1}});
   var top=CATS.filter(function(c){return!c.parent_id&&has[c.id]});
   $("#cats").hidden=!top.length&&dstate==="ok";
@@ -143,17 +158,19 @@ function renderDataInner(){
     var n=esc(nm(c.category_translations,lang)||nm(c.category_translations,"ar")||c.slug);
     return '<button type="button" class="cat'+(st.cat===c.id?" on":"")+'" data-c="'+c.id+'">'+n+"</button>"}).join("");
   if(dstate==="loading"){$("#g1").innerHTML=new Array(5).join('<div class="card sk"><div class="ph"></div><div class="info"><i></i><i></i></div></div>');$("#g3").innerHTML="";return}
-  if(dstate!=="ok"){var m=msg(dstate==="noconf"?"noConf":dstate==="error"?"loadErr":"noData");$("#g1").innerHTML=m;$("#g3").innerHTML=m;$("#best").hidden=true;return}
+  if(dstate!=="ok"){var m=msg(dstate==="noconf"?"noConf":dstate==="error"?"loadErr":"noData");$("#g1").innerHTML=m;$("#g3").innerHTML=m;$("#best").hidden=true;$("#feat").hidden=true;return}
   if(active){
     var list=filtered();
-    $("#resT").textContent=st.grp?t(st.grp==="new"?"newT":st.grp==="best"?"bestT":"looksT"):st.cat?nm((CATS.filter(function(c){return c.id===st.cat})[0]||{}).category_translations,lang):st.q?t("results"):st.fav?t("favT"):t("allT");
-    var lks=(st.cat||st.fav||st.grp==="new"||st.grp==="best")?[]:lookData().filter(function(x){var q=st.q.toLowerCase();return!q||(x.tr.title||"").toLowerCase().indexOf(q)>=0});
+    $("#resT").textContent=st.grp?grpTitle(st.grp):st.cat?nm((CATS.filter(function(c){return c.id===st.cat})[0]||{}).category_translations,lang):st.q?t("results"):st.fav?t("favT"):t("allT");
+    var lks=(st.cat||st.fav||(st.grp&&st.grp!=="looks"))?[]:lookData().filter(function(x){var q=st.q.toLowerCase();return!q||(x.tr.title||"").toLowerCase().indexOf(q)>=0});
     $("#g3").innerHTML=(list.length||lks.length)?lks.map(lookCard).join("")+list.map(card).join(""):msg("noData")
   }else{
-    var nw=PRODS.filter(function(p){return p.is_new}).slice(0,8);if(!nw.length)nw=PRODS.slice(0,4);
-    var bs=PRODS.filter(function(p){return p.is_bestseller}).slice(0,8);
-    $("#g1").innerHTML=nw.length?nw.map(card).join(""):msg("noData");
-    $("#best").hidden=!bs.length;$("#g2").innerHTML=bs.map(card).join("")
+    var nw=PRODS.filter(function(p){return p.is_new}).slice(0,12),ft=PRODS.filter(function(p){return p.is_featured}).slice(0,12),bs=PRODS.filter(function(p){return p.is_bestseller}).slice(0,12);
+    /* the sections show exactly what you marked in the dashboard; only if nothing is marked yet, the latest products fill "new" */
+    if(!nw.length&&!ft.length&&!bs.length&&!hasCustom())nw=PRODS.slice(0,8);
+    $("#new").hidden=!nw.length;$("#g1").innerHTML=nw.length?nw.map(card).join(""):msg("noData");
+    $("#feat").hidden=!ft.length;$("#g4").innerHTML=ft.map(card).join("");
+    $("#best").hidden=!bs.length;$("#g2").innerHTML=bs.map(card).join("");renderCustomSections()
   }
 }
 function renderData(){renderDataInner();reveal(document)}
@@ -274,6 +291,7 @@ function openProduct(id){
   var p=PRODS.filter(function(x){return x.id===id})[0];if(!p)return;
   var vs=p.product_variants||[],first=vs.filter(function(v){return v.stock>0})[0]||vs[0]||{};
   SEL={p:p,color:first.color||null,size:null,qty:1};
+  PX.track("ViewContent",{id:p.id,name:pname(p),value:cur(p)});
   sheet('<div class="pd"><div>'+galleryHtml(imgs(p).map(function(i){return i.path}))+'</div><div><h3 id="ptitle">'+esc(pname(p))+'</h3><div class="price" style="font-size:18px">'+fmt(cur(p))+(p.sale_price!=null?"<s>"+fmt(p.price)+"</s>":"")+'</div><p class="note" id="pdesc">'+esc(pdesc(p))+'</p><div id="opts"></div></div></div>');
   optsRender();initGallery()
 }
@@ -294,7 +312,7 @@ function cartAdd(p,v,q){
   var im=imgs(p)[0],it=cart.filter(function(i){return i.v===v.id})[0];
   if(it){it.q=Math.min(v.stock,it.q+q)}
   else cart.push({v:v.id,p:p.id,q:Math.min(v.stock,q),size:v.size,color:v.color,price:cur(p),name_ar:nm(p.product_translations,"ar")||nm(p.product_translations,"fr")||p.sku,name_fr:nm(p.product_translations,"fr")||nm(p.product_translations,"ar")||p.sku,img:im?im.path:null,max:v.stock});
-  save("cart",cart);setBadge(true);toast(t("added"))
+  save("cart",cart);setBadge(true);toast(t("added"));PX.track("AddToCart",{id:p.id,name:pname(p),value:cur(p)*q})
 }
 function addToCart(){
   var p=SEL.p,v=(p.product_variants||[]).filter(function(x){return x.color===SEL.color&&x.size===SEL.size})[0];if(!v||v.stock<1)return;
@@ -335,6 +353,7 @@ function openCart(){
   SEL=null;DT="home";syncCart();
   if(!cart.length){sheet('<h3>'+t("cart")+'</h3><p class="note">'+t("cartEmpty")+"</p>");return}
   var sub=cartSub(),wl=lang==="ar"?WA:WF;
+  PX.track("InitiateCheckout",{value:sub,ids:cart.map(function(i){return i.p}),n:cartCount()});
   sheet('<h3>'+t("cart")+'</h3><div id="ci">'+cart.map(function(i){return'<div class="ci">'+(i.img?'<img alt="" src="'+esc(url(i.img))+'">':'<div class="nb"></div>')+'<div class="sp"><b>'+esc(lang==="ar"?i.name_ar:i.name_fr)+"</b><br>"+esc(i.size)+" / "+esc(colorLabel(i.color))+"<br>"+fmt(i.price)+
     '</div><div class="qty"><button type="button" data-cq="'+i.v+'|-1">−</button><b>'+i.q+'</b><button type="button" data-cq="'+i.v+'|1">+</button></div><button class="xbtn" style="float:none" type="button" data-cr="'+i.v+'" aria-label="'+t("rem")+'">×</button></div>'}).join("")+"</div>"+
     '<form id="co" novalidate><label class="fld">'+t("fName")+'</label><input id="o_n" autocomplete="name" required><label class="fld">'+t("fPhone")+'</label><input id="o_p" type="tel" dir="ltr" autocomplete="tel" required>'+
@@ -355,7 +374,7 @@ async function placeOrder(e){
   var r=await sb.rpc("create_order",{p_items:cart.map(function(i){return{variant_id:i.v,qty:i.q}}),p_customer:cust,p_code:$("#o_c").value.trim()||null});
   if(r.error){var m=r.error.message||"";err.textContent=m.indexOf("out_of_stock")>=0||m.indexOf("product_unavailable")>=0||m.indexOf("variant_not_found")>=0?t("eStock"):m.indexOf("delivery_unavailable")>=0?t("eDeliv"):m.indexOf("invalid_discount")>=0?t("eCode"):m.indexOf("invalid_customer")>=0?t("eCust"):t("eGen");b.disabled=false;
     if(m.indexOf("stock")>=0||m.indexOf("unavailable")>=0||m.indexOf("not_found")>=0){await loadData();renderData();syncCart()}return}
-  var o=r.data;cart=[];save("cart",cart);setBadge();
+  var o=r.data;PX.track("Purchase",{value:o.total,ids:cart.map(function(i){return i.p}),n:cartCount()});cart=[];save("cart",cart);setBadge();
   sheet('<div class="ok"><h3>'+t("thanks")+'</h3><p>'+t("orderNo")+' <b dir="ltr">'+esc(o.order_number)+'</b></p><p>'+t("orderTot")+" <b>"+fmt(o.total)+"</b></p><p class=\"note\">"+t("willCall")+"</p></div>");
   loadData().then(renderData)
 }

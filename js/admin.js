@@ -56,6 +56,10 @@ Object.assign(T.ar,{trHint:"اكتب اسم المنتج ووصفه بلغة و�
 Object.assign(T.fr,{trHint:"Saisissez le nom et la description dans une seule langue : l’autre est traduite automatiquement à l’enregistrement (vous pouvez la corriger).",trBtn:"Traduire automatiquement",trWait:"Traduction en cours…",trDone:"Traduction automatique effectuée",trFail:"La traduction automatique a échoué, saisissez la traduction manuellement ou réessayez plus tard."});
 Object.assign(T.ar,{trAll:"ترجمة المنتجات للعربية",trAllAsk:"سيُترجم إلى العربية كل اسم أو وصف منتج لا يحتوي نصًا عربيًا (مثل النص الفرنسي المكتوب في خانة العربية). هل تريد المتابعة؟",trAllDone:"اكتملت الترجمة",trAllNone:"كل المنتجات مترجمة للعربية بالفعل",trAllStop:"توقفت الترجمة (الحد اليومي أو انقطاع الاتصال)، أعد المحاولة لاحقًا"});
 Object.assign(T.fr,{trAll:"Traduire les produits en arabe",trAllAsk:"Tout nom ou description de produit sans texte arabe (par exemple du français saisi dans le champ arabe) sera traduit en arabe. Continuer ?",trAllDone:"Traduction terminée",trAllNone:"Tous les produits sont déjà traduits en arabe",trAllStop:"Traduction interrompue (limite quotidienne ou connexion), réessayez plus tard"});
+Object.assign(T.ar,{sections:"الأقسام",sNew:"جديد",sFeat:"مميز",sBest:"الأكثر مبيعًا",sAdd:"أضف منتجًا",sEmpty:"لم تختر أي منتج، فالقسم مخفي في المتجر.",sSecNote:"اختر المنتجات التي تظهر في أقسام الصفحة الرئيسية. القسم الفارغ لا يظهر في المتجر، والمنتج المسودة لا يظهر حتى يُنشر."});
+Object.assign(T.fr,{sections:"Sections",sNew:"Nouveautés",sFeat:"En vedette",sBest:"Meilleures ventes",sAdd:"Ajouter un produit",sEmpty:"Aucun produit choisi : la section est masquée dans la boutique.",sSecNote:"Choisissez les produits affichés dans les sections de l’accueil. Une section vide n’apparaît pas, et un brouillon reste invisible tant qu’il n’est pas publié."});
+Object.assign(T.ar,{csNew:"قسم جديد (مثل تخفيضات)",csTrHint:"اكتب العنوان بلغة واحدة وتُترجم الأخرى تلقائيًا. القسم الفارغ لا يظهر في المتجر.",csSale:"أضف كل المنتجات المخفّضة",csNoSale:"لا توجد منتجات مخفّضة جديدة لإضافتها.",marketing:"التسويق",mkFb:"معرّف بكسل فيسبوك (Meta Pixel ID)، أرقام فقط",mkTt:"معرّف بكسل تيك توك (TikTok Pixel ID)",mkNote:"أدخل معرّف البكسل ليبدأ تتبع: مشاهدة المنتج، وإضافته للسلة، وبدء الطلب، وإتمامه، في المتجر وصفحات الهبوط. اترك الحقل فارغًا لإيقافه.",mkBad:"المعرّف غير صالح: فيسبوك أرقام فقط (5-20)، وتيك توك حروف وأرقام (8-32)."});
+Object.assign(T.fr,{csNew:"Nouvelle section (ex. Promotions)",csTrHint:"Saisissez le titre dans une seule langue, l’autre est traduite automatiquement. Une section vide n’apparaît pas.",csSale:"Ajouter tous les produits en promo",csNoSale:"Aucun nouveau produit en promotion à ajouter.",marketing:"Marketing",mkFb:"ID du pixel Facebook (Meta Pixel), chiffres uniquement",mkTt:"ID du pixel TikTok",mkNote:"Saisissez l’ID du pixel pour suivre : vue produit, ajout au panier, début et fin de commande, dans la boutique et les pages de vente. Laissez vide pour désactiver.",mkBad:"ID invalide : Facebook chiffres seulement (5-20), TikTok lettres et chiffres (8-32)."});
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let lang=(()=>{try{return localStorage.getItem('alang')||'ar'}catch(e){return 'ar'}})();
@@ -97,7 +101,7 @@ async function logout(){stopOrderWatch();try{sessionStorage.removeItem('owner')}
 function shell0(){$('#app').innerHTML=`<div class="top"><div class="row"><b class="sp" id="ttl" onclick="ownerTap()" style="user-select:none;cursor:default">${t('title')}</b>${langBtn()}<button class="btn sm" onclick="logout()">${t('logout')}</button></div>
  <div class="tabs">${tabsList().map(k=>`<button data-t="${k}" class="${k===tab?'on':''}" onclick="go('${k}')">${t(k)}</button>`).join('')}</div></div><main id="main"></main>`}
 async function go(k){tab=k;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===k));$('#main').innerHTML='…';
-  try{await({dash:vDash,catalog:vCatalog,orders:vOrders,looks:vLooks,landings:vLandings,discounts:vDiscounts,banners:vBanners,delivery:vDelivery,site:vSite}[k])()}catch(e){fail(e)}}
+  try{await({dash:vDash,catalog:vCatalog,sections:vSections,orders:vOrders,looks:vLooks,landings:vLandings,discounts:vDiscounts,banners:vBanners,marketing:vMarketing,delivery:vDelivery,site:vSite}[k])()}catch(e){fail(e)}}
 function modal(h){$('#modal').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeM()"><div class="sheet">${h}</div></div>`}
 function closeM(){$('#modal').innerHTML='';EDIT=null}
 
@@ -210,6 +214,68 @@ async function trBtn(){
   const b=$('#p_tr');b.disabled=true;toast(t('trWait'));
   try{await autoTranslate();toast(t('trDone'))}catch(e){fail(e)}
   b.disabled=false}
+
+/* ---------- home sections: new / featured / best sellers ---------- */
+/* ---------- home sections: fixed (new / featured / best sellers) and your own (e.g. Sales) ---------- */
+async function setFlag(id,field,val){const {error}=await sb.from('products').update({[field]:val}).eq('id',id);if(error)return fail(error);toast(t('saved'));vSections()}
+async function csAdd(sid,pid){
+  const {data}=await sb.from('home_section_items').select('product_id').eq('section_id',sid);
+  const {error}=await sb.from('home_section_items').insert({section_id:sid,product_id:pid,sort_order:(data||[]).length});if(error)return fail(error);vSections()}
+async function csRemove(sid,pid){const {error}=await sb.from('home_section_items').delete().eq('section_id',sid).eq('product_id',pid);if(error)return fail(error);vSections()}
+async function csSale(sid){
+  const {data:items}=await sb.from('home_section_items').select('product_id').eq('section_id',sid),have=new Set((items||[]).map(i=>i.product_id));
+  const {data:ps,error}=await sb.from('products').select('id').not('sale_price','is',null).eq('status','published');if(error)return fail(error);
+  const add=(ps||[]).filter(p=>!have.has(p.id)).map((p,i)=>({section_id:sid,product_id:p.id,sort_order:have.size+i}));
+  if(!add.length)return toast(t('csNoSale'));
+  const r=await sb.from('home_section_items').insert(add);if(r.error)return fail(r.error);toast(t('saved'));vSections()}
+async function vSections(){
+  const {data,error}=await sb.from('products').select('id,sku,status,sale_price,is_new,is_featured,is_bestseller,product_translations(lang,name),product_images(path,is_primary,sort_order)').order('created_at',{ascending:false});if(error)throw error;
+  let cs=[];try{const r=await sb.from('home_sections').select('*,home_section_items(product_id,sort_order)').order('sort_order');if(!r.error)cs=r.data||[]}catch(e){}
+  const nmOf=p=>nm(p.product_translations,lang)||nm(p.product_translations,'ar')||nm(p.product_translations,'fr')||p.sku;
+  const th=p=>{const im=(p.product_images||[]).slice().sort((x,y)=>(y.is_primary-x.is_primary)||(x.sort_order-y.sort_order))[0];return im?`<img src="${esc(pub(im.path))}" alt="" loading="lazy">`:'<div class="thumb"></div>'};
+  const row=(p,rm)=>`<div class="oi">${th(p)}<div class="sp"><b>${esc(nmOf(p))}</b>${p.status!=='published'?` <span class="pill ${p.status}">${t(p.status)}</span>`:''}</div><button class="btn sm red" onclick="${rm}" aria-label="${t('del')}">×</button></div>`;
+  const sel=(list,fn)=>`<select style="margin-top:10px" onchange="if(this.value)${fn}"><option value="">+ ${t('sAdd')}</option>${list.map(p=>`<option value="${p.id}">${esc(nmOf(p))} (${esc(p.sku)})</option>`).join('')}</select>`;
+  const box=([field,key])=>{const on=data.filter(p=>p[field]),off=data.filter(p=>!p[field]);
+    return `<div class="card"><div class="row"><b class="sp">${t(key)}</b><span class="pill">${on.length}</span></div>${on.length?on.map(p=>row(p,`setFlag('${p.id}','${field}',false)`)).join(''):`<p class="muted">${t('sEmpty')}</p>`}${sel(off,`setFlag(this.value,'${field}',true)`)}</div>`};
+  const cbox=s=>{const ids=(s.home_section_items||[]).slice().sort((a,b)=>a.sort_order-b.sort_order).map(i=>i.product_id),on=ids.map(id=>data.find(p=>p.id===id)).filter(Boolean),off=data.filter(p=>!ids.includes(p.id));
+    const title=(lang==='ar'?s.title_ar:s.title_fr)||s.title_ar||s.title_fr||'—';
+    return `<div class="card"><div class="row"><b class="sp">${esc(title)}</b>${s.is_active?'':'<span class="pill archived">—</span>'}<span class="pill">${on.length}</span></div>${on.length?on.map(p=>row(p,`csRemove('${s.id}','${p.id}')`)).join(''):`<p class="muted">${t('sEmpty')}</p>`}${sel(off,`csAdd('${s.id}',this.value)`)}
+    <div class="row" style="margin-top:10px"><button class="btn sm" onclick="csSale('${s.id}')">${t('csSale')}</button><button class="btn sm" onclick="openSection('${s.id}')">${t('edit')}</button><button class="btn sm red" onclick="delSection('${s.id}')">${t('del')}</button></div></div>`};
+  $('#main').innerHTML=`<div class="row"><p class="muted sp" style="margin:0">${t('sSecNote')}</p><button class="btn pri" onclick="openSection()">+ ${t('csNew')}</button></div>
+   <div class="grid" style="margin-top:12px">${[['is_new','sNew'],['is_featured','sFeat'],['is_bestseller','sBest']].map(box).join('')}${cs.map(cbox).join('')}</div>`}
+async function openSection(id){
+  let s={sort_order:0,is_active:true};
+  if(id){const {data,error}=await sb.from('home_sections').select('*').eq('id',id).single();if(error)return fail(error);s=data}
+  EDIT={id:id||null};
+  modal(`<div class="row"><h3 class="sp">${id?t('edit'):t('csNew')}</h3><button class="btn sm" onclick="closeM()">${t('close')}</button></div>
+  <div class="two"><div><label>${t('ttlAr')}</label><input id="sc_ta" value="${esc(s.title_ar)}" placeholder="تخفيضات"></div><div><label>${t('ttlFr')}</label><input id="sc_tf" value="${esc(s.title_fr)}" placeholder="Promotions"></div></div>
+  <p class="muted">${t('csTrHint')}</p>
+  <div class="two"><div><label>${t('order')}</label><input id="sc_so" type="number" value="${s.sort_order}"></div><div class="chk" style="align-items:end"><label><input type="checkbox" id="sc_on" ${s.is_active?'checked':''}>${t('dcActive')}</label></div></div>
+  <p style="margin-top:20px"><button class="btn pri" id="sc_save" onclick="saveSection()">${t('save')}</button></p>`)}
+async function saveSection(){
+  let ta=$('#sc_ta').value.trim(),tf=$('#sc_tf').value.trim();
+  if(ta&&!isAr(ta)){if(!tf)tf=ta;ta=''}
+  if(!ta&&!tf)return toast(t('req'),true);
+  const btn=$('#sc_save');btn.disabled=true;
+  try{
+    if(!ta)ta=await mmTranslate(tf,'fr','ar');else if(!tf)tf=await mmTranslate(ta,'ar','fr');
+    const row={title_ar:ta,title_fr:tf,sort_order:parseInt($('#sc_so').value)||0,is_active:$('#sc_on').checked};
+    const r=EDIT.id?await sb.from('home_sections').update(row).eq('id',EDIT.id):await sb.from('home_sections').insert(row);if(r.error)throw r.error;
+    toast(t('saved'));closeM();vSections()
+  }catch(e){fail(e);btn.disabled=false}}
+async function delSection(id){if(!confirm(t('confirmDel')))return;const {error}=await sb.from('home_sections').delete().eq('id',id);if(error)return fail(error);toast(t('deleted'));vSections()}
+
+/* ---------- marketing: ad pixels ---------- */
+async function vMarketing(){
+  const {data,error}=await sb.from('store_settings').select('value').eq('key','marketing').maybeSingle();if(error)throw error;const m=data?data.value:{};
+  $('#main').innerHTML=`<p class="muted">${t('mkNote')}</p><div class="card"><label>${t('mkFb')}</label><input id="mk_fb" dir="ltr" inputmode="numeric" placeholder="1234567890123456" value="${esc(m.fb)}"><label>${t('mkTt')}</label><input id="mk_tt" dir="ltr" placeholder="C1ABCDEFGHIJ23456789" value="${esc(m.tt)}"></div>
+  <p style="margin-top:16px"><button class="btn pri" id="mk_save" onclick="saveMarketing()">${t('save')}</button></p>`}
+async function saveMarketing(){
+  const fb=$('#mk_fb').value.trim(),tt=$('#mk_tt').value.trim();
+  if((fb&&!/^\d{5,20}$/.test(fb))||(tt&&!/^[A-Za-z0-9]{8,32}$/.test(tt)))return toast(t('mkBad'),true);
+  const btn=$('#mk_save');btn.disabled=true;
+  const r=await sb.from('store_settings').upsert({key:'marketing',value:{fb,tt}},{onConflict:'key'});
+  btn.disabled=false;if(r.error)return fail(r.error);toast(t('saved'))}
 
 /* ---------- catalog: categories with their products ---------- */
 let CQ='',CS='';
@@ -522,7 +588,7 @@ async function delLanding(id){if(!confirm(t('confirmDel')))return;const {error}=
 
 /* ---------- site content (owner only, unlocked by tapping the title 5 times) ---------- */
 let _ot=[];
-function tabsList(){let o=false;try{o=sessionStorage.getItem('owner')==='1'}catch(e){}return ['dash','catalog','orders','looks','landings','discounts','banners','delivery'].concat(o?['site']:[])}
+function tabsList(){let o=false;try{o=sessionStorage.getItem('owner')==='1'}catch(e){}return ['dash','catalog','sections','orders','looks','landings','discounts','banners','marketing','delivery'].concat(o?['site']:[])}
 function ownerTap(){const n=Date.now();_ot=_ot.filter(x=>n-x<4000);_ot.push(n);if(_ot.length>=5){_ot=[];try{sessionStorage.setItem('owner','1')}catch(e){}shell();go('site')}}
 const SITE_FIELDS=[['hTitle','sHTitle'],['h1','sH1'],['sub','sSub'],['shop','sShop'],['explore','sExplore'],['banT','sBanT'],['banP','sBanP'],['banB','sBanB'],['abT','sAbT'],['abP','sAbP'],['fAbout','sFAbout'],['copy','sCopy']];
 const SITE_IMG=[['logo','sLogo'],['hero','sHero'],['about_img','sAboutImg']];
